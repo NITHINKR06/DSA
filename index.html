@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java DSA Protocol: Ultimate Edition</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.3);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --border: #334155;
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        /* Layout & Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        /* Mode Selector */
+        .mode-selector {
+            display: inline-flex;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .mode-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn:hover { color: var(--text-primary); }
+        .mode-btn.active {
+            background: var(--accent);
+            color: var(--bg-color);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--card-bg);
+            height: 8px;
+            border-radius: 999px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .stats {
+            text-align: center;
+            margin-top: 10px;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        /* Phase Sections */
+        .phase-section { margin-top: 40px; }
+
+        .phase-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        .phase-badge {
+            background: var(--accent);
+            color: var(--bg-color);
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* Grid & Cards */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .card.completed {
+            background: rgba(74, 222, 128, 0.05);
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .day-label {
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topic-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Problem List */
+        .problem-list { list-style: none; }
+
+        .problem-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .problem-item:last-child { border-bottom: none; }
+
+        /* Checkbox */
+        .checkbox-wrapper { margin-right: 10px; position: relative; }
+        input[type="checkbox"] {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        input[type="checkbox"]:checked {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        input[type="checkbox"]:checked::after {
+            content: '✔';
+            position: absolute;
+            color: var(--bg-color);
+            font-size: 10px;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Problem Meta */
+        .lc-id {
+            color: var(--text-secondary);
+            font-family: var(--font-code);
+            font-size: 0.7rem;
+            width: 35px;
+        }
+
+        .problem-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            flex-grow: 1;
+            transition: color 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 5px;
+        }
+        .problem-link:hover { color: var(--accent); }
+
+        /* Badges */
+        .badge {
+            font-size: 0.65rem;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-right: 8px;
+            min-width: 45px;
+            text-align: center;
+        }
+        .badge-easy { background: rgba(74, 222, 128, 0.15); color: var(--success); border: 1px solid rgba(74, 222, 128, 0.2); }
+        .badge-med { background: rgba(251, 191, 36, 0.15); color: var(--warning); border: 1px solid rgba(251, 191, 36, 0.2); }
+        .badge-hard { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+
+        /* Notes Button */
+        .note-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            transition: all 0.2s;
+            font-size: 1rem;
+            padding: 2px;
+        }
+        .note-btn:hover { opacity: 1; color: var(--accent); }
+        .note-btn.has-notes { color: var(--accent); opacity: 1; }
+
+        /* Footer Actions */
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { border-color: var(--accent); color: var(--text-primary); }
+        .btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+        .modal {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--border);
+        }
+        .modal-title { margin-bottom: 15px; font-size: 1.1rem; font-weight: 700; }
+        .modal textarea {
+            width: 100%; height: 150px;
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-family: var(--font-main);
+            resize: vertical;
+        }
+        .modal-actions { text-align: right; }
+        .modal-btn {
+            padding: 8px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600;
+        }
+        .btn-save { background: var(--accent); color: var(--bg-color); margin-left: 10px; }
+        .btn-cancel { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
+
+        /* Pomodoro Widget */
+        .timer-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 140px;
+        }
+        .timer-display {
+            font-family: var(--font-code);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        .timer-controls { display: flex; gap: 8px; }
+        .timer-btn {
+            background: var(--border); border: none; color: var(--text-secondary);
+            width: 30px; height: 30px; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .timer-btn:hover { background: var(--accent); color: var(--bg-color); }
+        .timer-active { border-color: var(--accent); }
+
+        /* File Input */
+        #fileInput { display: none; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6rem; }
+            .timer-widget { bottom: 10px; right: 10px; transform: scale(0.9); transform-origin: bottom right; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Java DSA Protocol</h1>
+            <div class="subtitle">Ultimate Edition • 72 Problems • Notes • Timer</div>
+            
+            <div class="mode-selector">
+                <button class="mode-btn active" id="btn30" onclick="setMode(30)">30 Days (Intense)</button>
+                <button class="mode-btn" id="btn60" onclick="setMode(60)">60 Days (Relaxed)</button>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="stats" id="statsText">0% Complete</div>
+        </header>
+
+        <div id="app"></div>
+
+        <div class="footer">
+            <button class="action-btn" onclick="exportData()">💾 Export Backup</button>
+            <button class="action-btn" onclick="document.getElementById('fileInput').click()">📂 Import Backup</button>
+            <button class="action-btn btn-danger" onclick="resetProgress()">⚠️ Reset Mode</button>
+            <input type="file" id="fileInput" accept=".json" onchange="importData(this)">
+        </div>
+    </div>
+
+    <div class="timer-widget" id="timerWidget">
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-controls">
+            <button class="timer-btn" onclick="toggleTimer()" title="Start/Pause">⏯</button>
+            <button class="timer-btn" onclick="resetTimer()" title="Reset">↺</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="noteModal">
+        <div class="modal">
+            <div class="modal-title" id="modalTitle">Problem Notes</div>
+            <textarea id="noteInput" placeholder="Write your approach, time complexity, or edge cases here..."></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn btn-save" onclick="saveNote()">Save Note</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. DATA: Enriched 30-Day Roadmap (Diff: E/M/H)
+        // ==========================================
+        const roadmap30 = [
+            {
+                phase: "Arrays (Foundation)",
+                days: [
+                    { day: 1, topic: "Basics & Logic", problems: [
+                        { id: "1920", title: "Build Array from Permutation", diff: "E" },
+                        { id: "1480", title: "Running Sum of 1d Array", diff: "E" },
+                        { id: "724", title: "Find Pivot Index", diff: "E" },
+                        { id: "1295", title: "Find Numbers with Even Digits", diff: "E" }
+                    ]},
+                    { day: 2, topic: "Subarrays & Stats", problems: [
+                        { id: "53", title: "Maximum Subarray", diff: "M" },
+                        { id: "121", title: "Best Time to Buy and Sell Stock", diff: "E" },
+                        { id: "169", title: "Majority Element", diff: "E" },
+                        { id: "217", title: "Contains Duplicate", diff: "E" }
+                    ]},
+                    { day: 3, topic: "Array Manipulation", problems: [
+                        { id: "189", title: "Rotate Array", diff: "M" },
+                        { id: "283", title: "Move Zeroes", diff: "E" },
+                        { id: "66", title: "Plus One", diff: "E" },
+                        { id: "268", title: "Missing Number", diff: "E" }
+                    ]},
+                    { day: 4, topic: "Two Pointers & Hashing", problems: [
+                        { id: "1", title: "Two Sum", diff: "E" },
+                        { id: "167", title: "Two Sum II", diff: "M" },
+                        { id: "977", title: "Squares of a Sorted Array", diff: "E" },
+                        { id: "560", title: "Subarray Sum Equals K", diff: "M" }
+                    ]},
+                    { day: 5, topic: "Sorting & Search", problems: [
+                        { id: "88", title: "Merge Sorted Array", diff: "E" },
+                        { id: "287", title: "Find the Duplicate Number", diff: "M" },
+                        { id: "75", title: "Sort Colors", diff: "M" },
+                        { id: "215", title: "Kth Largest Element in an Array", diff: "M" }
+                    ]},
+                    { day: 6, topic: "Advanced Arrays", problems: [
+                        { id: "152", title: "Maximum Product Subarray", diff: "M" },
+                        { id: "238", title: "Product of Array Except Self", diff: "M" },
+                        { id: "128", title: "Longest Consecutive Sequence", diff: "M" }
+                    ]},
+                    { day: 7, topic: "Revision", problems: [
+                        { id: "REV", title: "Re-solve: Max Subarray, Two Sum", diff: "R" },
+                        { id: "WRI", title: "Write Time/Space Complexity", diff: "R" }
+                    ]}
+                ]
+            },
+            {
+                phase: "Strings",
+                days: [
+                    { day: 8, topic: "String Basics", problems: [
+                        { id: "344", title: "Reverse String", diff: "E" },
+                        { id: "125", title: "Valid Palindrome", diff: "E" },
+                        { id: "345", title: "Reverse Vowels of a String", diff: "E" }
+                    ]},
+                    { day: 9, topic: "Anagrams", problems: [
+                        { id: "242", title: "Valid Anagram", diff: "E" },
+                        { id: "49", title: "Group Anagrams", diff: "M" },
+                        { id: "387", title: "First Unique Character", diff: "E" }
+                    ]},
+                    { day: 10, topic: "String Parsing", problems: [
+                        { id: "14", title: "Longest Common Prefix", diff: "E" },
+                        { id: "28", title: "Find Index of First Occurrence", diff: "E" },
+                        { id: "58", title: "Length of Last Word", diff: "E" }
+                    ]},
+                    { day: 11, topic: "Sliding Window", problems: [
+                        { id: "3", title: "Longest Substring Without Repeating", diff: "M" },
+                        { id: "567", title: "Permutation in String", diff: "M" }
+                    ]},
+                    { day: 12, topic: "Revision", problems: [
+                        { id: "REV", title: "Re-solve: Valid Palindrome, Anagram", diff: "R" }
+                    ]}
+                ]
+            },
+            {
+                phase: "Recursion",
+                days: [
+                    { day: 13, topic: "Recursion Basics", problems: [
+                        { id: "509", title: "Fibonacci Number", diff: "E" },
+                        { id: "70", title: "Climbing Stairs", diff: "E" },
+                        { id: "344-R", title: "Reverse String (Recursive)", diff: "E" }
+                    ]},
+                    { day: 14, topic: "Subsets", problems: [
+                        { id: "78", title: "Subsets", diff: "M" },
+                        { id: "90", title: "Subsets II", diff: "M" }
+                    ]},
+                    { day: 15, topic: "Permutations", problems: [
+                        { id: "46", title: "Permutations", diff: "M" },
+                        { id: "47", title: "Permutations II", diff: "M" }
+                    ]},
+                    { day: 16, topic: "Comb Sum", problems: [
+                        { id: "39", title: "Combination Sum", diff: "M" },
+                        { id: "40", title: "Combination Sum II", diff: "M" }
+                    ]}
+                ]
+            },
+            {
+                phase: "Linked List",
+                days: [
+                    { day: 17, topic: "LL Basics", problems: [
+                        { id: "206", title: "Reverse Linked List", diff: "E" },
+                        { id: "876", title: "Middle of Linked List", diff: "E" },
+                        { id: "141", title: "Linked List Cycle", diff: "E" }
+                    ]},
+                    { day: 18, topic: "Two Pointers LL", problems: [
+                        { id: "142", title: "Linked List Cycle II", diff: "M" },
+                        { id: "21", title: "Merge Two Sorted Lists", diff: "E" }
+                    ]},
+                    { day: 19, topic: "Removal", problems: [
+                        { id: "19", title: "Remove Nth Node From End", diff: "M" },
+                        { id: "160", title: "Intersection of Two Lists", diff: "E" }
+                    ]},
+                    { day: 20, topic: "Advanced LL", problems: [
+                        { id: "234", title: "Palindrome Linked List", diff: "E" },
+                        { id: "138", title: "Copy List with Random Pointer", diff: "M" }
+                    ]}
+                ]
+            },
+            {
+                phase: "Stack & Queue",
+                days: [
+                    { day: 21, topic: "Standard Stack", problems: [
+                        { id: "20", title: "Valid Parentheses", diff: "E" },
+                        { id: "155", title: "Min Stack", diff: "M" }
+                    ]},
+                    { day: 22, topic: "Monotonic Stack", problems: [
+                        { id: "496", title: "Next Greater Element I", diff: "E" },
+                        { id: "503", title: "Next Greater Element II", diff: "M" }
+                    ]},
+                    { day: 23, topic: "Hard Stack", problems: [
+                        { id: "239", title: "Sliding Window Maximum", diff: "H" },
+                        { id: "84", title: "Largest Rectangle in Histogram", diff: "H" }
+                    ]}
+                ]
+            },
+            {
+                phase: "Trees",
+                days: [
+                    { day: 24, topic: "DFS Traversals", problems: [
+                        { id: "144", title: "Preorder Traversal", diff: "E" },
+                        { id: "94", title: "Inorder Traversal", diff: "E" },
+                        { id: "145", title: "Postorder Traversal", diff: "E" }
+                    ]},
+                    { day: 25, topic: "BFS & Depth", problems: [
+                        { id: "102", title: "Level Order Traversal", diff: "M" },
+                        { id: "104", title: "Maximum Depth of Binary Tree", diff: "E" }
+                    ]},
+                    { day: 26, topic: "Tree Properties", problems: [
+                        { id: "543", title: "Diameter of Binary Tree", diff: "E" },
+                        { id: "110", title: "Balanced Binary Tree", diff: "E" }
+                    ]},
+                    { day: 27, topic: "Advanced Tree", problems: [
+                        { id: "236", title: "Lowest Common Ancestor", diff: "M" },
+                        { id: "101", title: "Symmetric Tree", diff: "E" }
+                    ]}
+                ]
+            },
+            {
+                phase: "BS & Hashing",
+                days: [
+                    { day: 28, topic: "Binary Search I", problems: [
+                        { id: "704", title: "Binary Search", diff: "E" },
+                        { id: "35", title: "Search Insert Position", diff: "E" },
+                        { id: "34", title: "Find First and Last Position", diff: "M" }
+                    ]},
+                    { day: 29, topic: "Binary Search II", problems: [
+                        { id: "153", title: "Find Min in Rotated Array", diff: "M" },
+                        { id: "33", title: "Search in Rotated Sorted Array", diff: "M" }
+                    ]},
+                    { day: 30, topic: "Final Revision", problems: [
+                        { id: "217", title: "Contains Duplicate", diff: "R" },
+                        { id: "347", title: "Top K Frequent Elements", diff: "M" },
+                        { id: "242", title: "Valid Anagram (Revisit)", diff: "R" }
+                    ]}
+                ]
+            }
+        ];
+
+        // ==========================================
+        // 2. LOGIC: 60-Day Generator
+        // ==========================================
+        function generate60DayRoadmap(baseRoadmap) {
+            const roadmap60 = [];
+            let globalDayCounter = 1;
+            baseRoadmap.forEach(phase => {
+                const newPhase = { phase: phase.phase, days: [] };
+                phase.days.forEach(day => {
+                    const problems = day.problems;
+                    const mid = Math.ceil(problems.length / 2);
+                    const part1 = problems.slice(0, mid);
+                    const part2 = problems.slice(mid);
+
+                    if (part1.length > 0) newPhase.days.push({ day: globalDayCounter++, topic: `${day.topic} (I)`, problems: part1 });
+                    if (part2.length > 0) newPhase.days.push({ day: globalDayCounter++, topic: `${day.topic} (II)`, problems: part2 });
+                });
+                roadmap60.push(newPhase);
+            });
+            return roadmap60;
+        }
+        const roadmap60 = generate60DayRoadmap(roadmap30);
+
+        // ==========================================
+        // 3. APP STATE & FUNCTIONS
+        // ==========================================
+        let currentMode = parseInt(localStorage.getItem('dsaMode')) || 30;
+        let completed = [];
+        let notes = {}; // { uniqueId: "note text" }
+        let activeNoteId = null;
+
+        function loadData() {
+            completed = JSON.parse(localStorage.getItem(`dsaProgress${currentMode}`)) || [];
+            notes = JSON.parse(localStorage.getItem('dsaNotes')) || {};
+        }
+
+        function saveData() {
+            localStorage.setItem(`dsaProgress${currentMode}`, JSON.stringify(completed));
+            localStorage.setItem('dsaNotes', JSON.stringify(notes));
+            renderStats();
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            localStorage.setItem('dsaMode', mode);
+            document.getElementById('btn30').className = mode === 30 ? 'mode-btn active' : 'mode-btn';
+            document.getElementById('btn60').className = mode === 60 ? 'mode-btn active' : 'mode-btn';
+            loadData();
+            renderApp();
+        }
+
+        function toggleProblem(uniqueId) {
+            if (completed.includes(uniqueId)) completed = completed.filter(id => id !== uniqueId);
+            else completed.push(uniqueId);
+            saveData();
+            updateCardStyle(document.getElementById(uniqueId).closest('.card'));
+        }
+
+        function updateCardStyle(card) {
+            const checkboxes = card.querySelectorAll('input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked) && checkboxes.length > 0;
+            if (allChecked) card.classList.add('completed');
+            else card.classList.remove('completed');
+        }
+
+        function getDiffBadge(code) {
+            if(code === 'E') return '<span class="badge badge-easy">EASY</span>';
+            if(code === 'M') return '<span class="badge badge-med">MED</span>';
+            if(code === 'H') return '<span class="badge badge-hard">HARD</span>';
+            return '<span class="badge">REV</span>';
+        }
+
+        function renderStats() {
+            const activeRoadmap = currentMode === 30 ? roadmap30 : roadmap60;
+            let total = 0;
+            activeRoadmap.forEach(p => p.days.forEach(d => total += d.problems.length));
+            const count = completed.length;
+            const pct = total === 0 ? 0 : Math.round((count / total) * 100);
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('statsText').innerText = `${pct}% Complete • ${count}/${total}`;
+        }
+
+        function generateLink(id, title) {
+            if (id === "REV" || id === "WRI") return "#";
+            return `https://leetcode.com/problemset/all/?search=${title.replace(/\s+/g, '+')}`;
+        }
+
+        function renderApp() {
+            const app = document.getElementById('app');
+            const activeRoadmap = currentMode === 30 ? roadmap30 : roadmap60;
+            let html = '';
+
+            activeRoadmap.forEach(phase => {
+                html += `<div class="phase-section"><div class="phase-title"><span class="phase-badge">${phase.phase}</span></div><div class="days-grid">`;
+                phase.days.forEach(day => {
+                    html += `<div class="card"><div class="card-header"><span class="day-label">DAY ${day.day}</span><span class="topic-label">${day.topic}</span></div><ul class="problem-list">`;
+                    day.problems.forEach(prob => {
+                        const uid = `m${currentMode}-d${day.day}-${prob.id}`;
+                        const isChecked = completed.includes(uid) ? 'checked' : '';
+                        const hasNote = notes[uid] ? 'has-notes' : '';
+                        const target = prob.id === "REV" ? "" : "_blank";
+                        
+                        html += `
+                            <li class="problem-item">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="${uid}" ${isChecked} onchange="toggleProblem('${uid}')">
+                                </div>
+                                ${getDiffBadge(prob.diff)}
+                                <span class="lc-id">${prob.id}</span>
+                                <a href="${generateLink(prob.id, prob.title)}" target="${target}" class="problem-link">${prob.title}</a>
+                                <button class="note-btn ${hasNote}" onclick="openNote('${uid}', '${prob.title}')">📝</button>
+                            </li>`;
+                    });
+                    html += `</ul></div>`;
+                });
+                html += `</div></div>`;
+            });
+
+            app.innerHTML = html;
+            document.querySelectorAll('.card').forEach(updateCardStyle);
+            renderStats();
+        }
+
+        // ==========================================
+        // 4. NOTES MODAL LOGIC
+        // ==========================================
+        const modal = document.getElementById('noteModal');
+        const noteInput = document.getElementById('noteInput');
+        const modalTitle = document.getElementById('modalTitle');
+
+        function openNote(uid, title) {
+            activeNoteId = uid;
+            modalTitle.innerText = `Notes: ${title}`;
+            noteInput.value = notes[uid] || "";
+            modal.style.display = 'flex';
+        }
+
+        function saveNote() {
+            if (!activeNoteId) return;
+            const val = noteInput.value.trim();
+            if (val) notes[activeNoteId] = val;
+            else delete notes[activeNoteId];
+            saveData();
+            closeModal();
+            renderApp(); // Re-render to update icon color
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            activeNoteId = null;
+        }
+
+        // ==========================================
+        // 5. TIMER LOGIC (POMODORO)
+        // ==========================================
+        let timerInterval;
+        let timeLeft = 25 * 60;
+        let isTimerRunning = false;
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${m}:${s}`;
+        }
+
+        function toggleTimer() {
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                document.getElementById('timerWidget').classList.remove('timer-active');
+            } else {
+                isTimerRunning = true;
+                document.getElementById('timerWidget').classList.add('timer-active');
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        isTimerRunning = false;
+                        alert("Time's up! Take a break.");
+                        document.getElementById('timerWidget').classList.remove('timer-active');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timeLeft = 25 * 60;
+            updateTimerDisplay();
+            document.getElementById('timerWidget').classList.remove('timer-active');
+        }
+
+        // ==========================================
+        // 6. IMPORT / EXPORT / RESET
+        // ==========================================
+        function resetProgress() {
+            if(confirm("Reset current mode progress? Notes will be kept.")) {
+                completed = [];
+                saveData();
+                renderApp();
+            }
+        }
+
+        function exportData() {
+            const data = {
+                progress30: JSON.parse(localStorage.getItem('dsaProgress30') || '[]'),
+                progress60: JSON.parse(localStorage.getItem('dsaProgress60') || '[]'),
+                notes: notes
+            };
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dsa-backup-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if(data.progress30) localStorage.setItem('dsaProgress30', JSON.stringify(data.progress30));
+                    if(data.progress60) localStorage.setItem('dsaProgress60', JSON.stringify(data.progress60));
+                    if(data.notes) localStorage.setItem('dsaNotes', JSON.stringify(data.notes));
+                    alert("Import successful! Reloading...");
+                    location.reload();
+                } catch(err) {
+                    alert("Invalid backup file.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Initialize
+        setMode(currentMode);
+
+    </script>
+</body>
+</html>
