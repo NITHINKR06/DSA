@@ -252,18 +252,45 @@
         .badge-hard { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
 
         /* Notes Button */
+       /* Notes Button (Problem-level) */
         .note-btn {
             background: transparent;
-            border: none;
+            border: 1px solid var(--border);
             cursor: pointer;
             color: var(--text-secondary);
-            opacity: 0.5;
-            transition: all 0.2s;
-            font-size: 1rem;
-            padding: 2px;
+            font-size: 0.9rem;
+            padding: 4px 6px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 
+                color 0.2s ease,
+                border-color 0.2s ease,
+                background 0.2s ease,
+                transform 0.1s ease;
         }
-        .note-btn:hover { opacity: 1; color: var(--accent); }
-        .note-btn.has-notes { color: var(--accent); opacity: 1; }
+        
+        /* Hover */
+        .note-btn:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: rgba(56, 189, 248, 0.08);
+            transform: scale(1.05);
+        }
+        
+        /* When note exists */
+        .note-btn.has-notes {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: rgba(56, 189, 248, 0.15);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+        
+        /* Click feedback */
+        .note-btn:active {
+            transform: scale(0.95);
+        }
 
         /* Footer Actions */
         .footer {
