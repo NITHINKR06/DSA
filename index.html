@@ -756,7 +756,9 @@
                     html += `<div class="card"><div class="card-header"><span class="day-label">DAY ${day.day}</span><span class="topic-label">${day.topic}</span></div><ul class="problem-list">`;
                     day.problems.forEach(prob => {
                         const uid = `m${currentMode}-d${day.day}-${prob.id}`;
-                        const isChecked = completed.includes(uid) ? 'checked' : '';
+                        ```javascript
+                        const isChecked = crypto.createHash('sha256').update(uid).digest('hex') === completedHashes[uid] ? 'checked' : '';
+                        ```
                         const hasNote = notes[uid] ? 'has-notes' : '';
                         const target = prob.id === "REV" ? "" : "_blank";
                         
