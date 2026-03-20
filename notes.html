@@ -805,7 +805,10 @@
                     return hashHex.includes(query);
                 })) ||
                 ```
-                (note.code && note.code.toLowerCase().includes(query))
+                ```javascript
+                (note.code && crypto.createHash('sha256').update(note.code).digest('hex').toLowerCase().includes(query))
+                // Use SHA-256 for secure code search
+                ```
             );
 
             renderNotes(filtered);
