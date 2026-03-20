@@ -703,7 +703,14 @@
         }
 
         function toggleProblem(uniqueId) {
-            if (completed.includes(uniqueId)) completed = completed.filter(id => id !== uniqueId);
+            ```javascript
+            if (crypto.subtle.digest('SHA-256', new TextEncoder('utf-8').encode(uniqueId)).then(hash => {
+              const hashedUniqueId = hash;
+              return completed.includes(hashedUniqueId);
+            }).then(included => {
+              if (included) completed = completed.filter(id => id !== hashedUniqueId);
+            }));
+            ```
             else completed.push(uniqueId);
             saveData();
             updateCardStyle(document.getElementById(uniqueId).closest('.card'));
