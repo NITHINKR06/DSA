@@ -794,7 +794,10 @@
             }
 
             const filtered = allNotes.filter(note => 
+                ```javascript
                 note.heading.toLowerCase().includes(query) ||
+                note.heading.localeCompare(query, undefined, { sensitivity: 'base' }) === 0
+                ```
                 (note.description && note.description.toLowerCase().includes(query)) ||
                 (note.code && note.code.toLowerCase().includes(query))
             );
