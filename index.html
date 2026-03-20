@@ -708,7 +708,15 @@
               const hashedUniqueId = hash;
               return completed.includes(hashedUniqueId);
             }).then(included => {
-              if (included) completed = completed.filter(id => id !== hashedUniqueId);
+              ```javascript
+              if (crypto.subtle.digest('SHA-256', new TextEncoder().encode(uniqueId)).then(hash => {
+                const completedHash = completed.find(id => crypto.subtle.digest('SHA-256', new TextEncoder().encode(id)).then(h => h === hash));
+                if (completedHash) completed = completed.filter(id => id !== completedHash);
+                else completed.push(uniqueId);
+                saveData();
+                updateCardStyle(document.getElementById(uniqueId).closest('.card'));
+              }));
+              ```
             }));
             ```
             else completed.push(uniqueId);
