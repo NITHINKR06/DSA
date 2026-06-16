@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Interview Prep — Python</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #21262d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --warn: #f85149;
+    --muted: #8b949e;
+    --text: #e6edf3;
+    --text-dim: #c9d1d9;
+    --hard: #ff7b72;
+    --tag-bg: #1f2937;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  header h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: var(--muted);
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    margin: 1.5rem auto 0;
+    max-width: 400px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* Topic sections */
+  .topic {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+  }
+
+  .topic-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    user-select: none;
+    gap: 1rem;
+  }
+
+  .topic-header:hover { background: rgba(88,166,255,0.04); }
+
+  .topic-title {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .topic-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 5px;
+    padding: 2px 7px;
+    min-width: 30px;
+    text-align: center;
+  }
+
+  .topic-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .topic-progress-text {
+    font-size: 0.78rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+  }
+
+  .topic-mini-bar {
+    width: 80px;
+    height: 5px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .topic-mini-fill {
+    height: 100%;
+    background: var(--accent2);
+    border-radius: 99px;
+    transition: width 0.3s ease;
+    width: 0%;
+  }
+
+  .chevron {
+    color: var(--muted);
+    font-size: 0.8rem;
+    transition: transform 0.2s;
+  }
+
+  .topic.open .chevron { transform: rotate(180deg); }
+
+  /* overview link */
+  .overview-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 0 1.2rem 0.8rem;
+    opacity: 0.85;
+  }
+  .overview-link:hover { opacity: 1; text-decoration: underline; }
+
+  /* Table */
+  .problem-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  .problem-table th {
+    text-align: left;
+    padding: 0.5rem 1rem;
+    font-size: 0.72rem;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .problem-table td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .problem-table tr:last-child td { border-bottom: none; }
+
+  .problem-table tr:hover td { background: rgba(88,166,255,0.03); }
+
+  /* Checkbox */
+  .check {
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    background: transparent;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .check:checked {
+    background: var(--accent2);
+    border-color: var(--accent2);
+  }
+  .check:checked::after {
+    content: '✓';
+    position: absolute;
+    top: -2px;
+    left: 2px;
+    font-size: 12px;
+    color: #0d1117;
+    font-weight: 700;
+  }
+  .check:hover { border-color: var(--accent); }
+
+  /* Row done state */
+  tr.done td { opacity: 0.45; }
+  tr.done .problem-link { text-decoration: line-through; }
+
+  /* Links */
+  .problem-link {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .problem-link:hover { color: var(--accent); }
+
+  .video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 3px 9px;
+    border: 1px solid rgba(88,166,255,0.25);
+    border-radius: 5px;
+    background: rgba(88,166,255,0.07);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .video-link:hover {
+    background: rgba(88,166,255,0.15);
+    border-color: var(--accent);
+  }
+
+  .pattern-tag {
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: var(--tag-bg);
+    border-radius: 4px;
+    padding: 2px 7px;
+    white-space: nowrap;
+  }
+
+  .hard-badge {
+    font-size: 0.68rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--hard);
+    border: 1px solid rgba(248,81,73,0.3);
+    border-radius: 4px;
+    padding: 1px 5px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* Topic body collapse */
+  .topic-body { display: none; }
+  .topic.open .topic-body { display: block; }
+
+  /* Resources */
+  .resources {
+    margin-top: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+  }
+  .resources h2 {
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+  .resources a {
+    display: block;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.88rem;
+    padding: 0.3rem 0;
+  }
+  .resources a:hover { text-decoration: underline; }
+
+  /* Reset button */
+  .reset-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.78rem;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.15s;
+  }
+  .reset-btn:hover { border-color: var(--warn); color: var(--warn); }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>DSA Interview Prep — Python</h1>
+    <p>~55 problems · 13 topics · Interview-ready    </p>
+    <div class="progress-bar-wrap">
+      <div class="progress-label">
+        <span>Overall Progress</span>
+        <span id="overall-count">0 / 55</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="overall-fill"></div></div>
+    </div>
+    <div class="header-actions">
+      <button class="reset-btn" onclick="resetAll()">↺ Reset Progress</button>
+    </div>
+  </header>
+
+  <div id="topics"></div>
+
+  <div class="resources">
+    <h2>📚 Quick Reference</h2>
+    <a href="https://neetcode.io/roadmap" target="_blank" rel="noopener">NeetCode Roadmap ↗</a>
+    <a href="https://www.youtube.com/playlist?list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O" target="_blank" rel="noopener">Abdul Bari — Algorithms (Theory) ↗</a>
+    <a href="https://www.youtube.com/playlist?list=PLgUwDviBIf0oF6QL8m22w1hIDC1vJ_BHz" target="_blank" rel="noopener">take U forward — DSA (Python) ↗</a>
+    <a href="https://www.bigocheatsheet.com/" target="_blank" rel="noopener">Big-O Cheat Sheet ↗</a>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  {
+    id: 1, title: "Arrays + Hashing",
+    overview: "https://www.youtube.com/watch?v=KLlXCFG5TnA",
+    problems: [
+      { name: "Two Sum", url: "https://leetcode.com/problems/two-sum/", pattern: "Hash Map", video: "https://youtu.be/KLlXCFG5TnA" },
+      { name: "Contains Duplicate", url: "https://leetcode.com/problems/contains-duplicate/", pattern: "Hash Set", video: "https://youtu.be/3OamzN90kPg" },
+      { name: "Valid Anagram", url: "https://leetcode.com/problems/valid-anagram/", pattern: "Frequency Count", video: "https://youtu.be/9UtInBqnCgA" },
+      { name: "Arrays Left Rotation", url: "https://www.hackerrank.com/challenges/array-left-rotation/problem", pattern: "Array Manipulation", video: "https://youtu.be/RJzW_4RJQH4" },
+      { name: "Group Anagrams", url: "https://leetcode.com/problems/group-anagrams/", pattern: "Hashing + Grouping", video: "https://youtu.be/vzdNOK2oB2E" },
+    ]
+  },
+  {
+    id: 2, title: "Two Pointers",
+    overview: "https://www.youtube.com/watch?v=jzZsG8n2R9A",
+    problems: [
+      { name: "Valid Palindrome", url: "https://leetcode.com/problems/valid-palindrome/", pattern: "Two Pointers", video: "https://youtu.be/jn5LY6aiizQ" },
+      { name: "Container With Most Water", url: "https://leetcode.com/problems/container-with-most-water/", pattern: "Two Pointers", video: "https://youtu.be/UuiTKBwPgAo" },
+      { name: "3Sum", url: "https://leetcode.com/problems/3sum/", pattern: "Sort + Two Pointers", video: "https://youtu.be/jzZsG8n2R9A" },
+      { name: "Triplets", url: "https://www.hackerrank.com/challenges/count-triplets-1/problem", pattern: "Two Pointers", video: "https://youtu.be/1e4Q9M7nKZI" },
+    ]
+  },
+  {
+    id: 3, title: "Sliding Window",
+    overview: "https://www.youtube.com/watch?v=p-ss2JNynmw",
+    problems: [
+      { name: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/", pattern: "Sliding Window", video: "https://youtu.be/1pkOgXD63yU" },
+      { name: "Longest Substring Without Repeating Characters", url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/", pattern: "Variable Window", video: "https://youtu.be/wiGpQwVHdE0" },
+      { name: "Permutation in String", url: "https://leetcode.com/problems/permutation-in-string/", pattern: "Fixed Window", video: "https://youtu.be/UbyhOgBN834" },
+      { name: "Minimum Window Substring", url: "https://leetcode.com/problems/minimum-window-substring/", pattern: "Advanced Window", video: "https://youtu.be/jSto0O4AJbM", hard: true },
+    ]
+  },
+  {
+    id: 4, title: "Stack",
+    overview: "https://www.youtube.com/watch?v=0VLuf3Wph1c",
+    problems: [
+      { name: "Valid Parentheses", url: "https://leetcode.com/problems/valid-parentheses/", pattern: "Stack", video: "https://youtu.be/WTzjTskDFMg" },
+      { name: "Balanced Brackets", url: "https://www.hackerrank.com/challenges/balanced-brackets/problem", pattern: "Stack", video: "https://youtu.be/VCHqlS6mOoM" },
+      { name: "Min Stack", url: "https://leetcode.com/problems/min-stack/", pattern: "Design Stack", video: "https://youtu.be/qkLl7nAwDPo" },
+      { name: "Daily Temperatures", url: "https://leetcode.com/problems/daily-temperatures/", pattern: "Monotonic Stack", video: "https://youtu.be/cTBiBSnjO3c" },
+      { name: "Largest Rectangle in Histogram", url: "https://leetcode.com/problems/largest-rectangle-in-histogram/", pattern: "Monotonic Stack", video: "https://youtu.be/zx5Sw9130L0", hard: true },
+    ]
+  },
+  {
+    id: 5, title: "Binary Search",
+    overview: "https://www.youtube.com/watch?v=s4DPM8ct1pI",
+    problems: [
+      { name: "Binary Search", url: "https://leetcode.com/problems/binary-search/", pattern: "Classic BS", video: "https://youtu.be/s4DPM8ct1pI" },
+      { name: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", pattern: "Classic BS", video: "https://youtu.be/K-RYzDZkzqA" },
+      { name: "Search in Rotated Sorted Array", url: "https://leetcode.com/problems/search-in-rotated-sorted-array/", pattern: "Modified BS", video: "https://youtu.be/U8XENwh8Oy8" },
+      { name: "Find Minimum in Rotated Sorted Array", url: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/", pattern: "Modified BS", video: "https://youtu.be/nIVW4P8b1VA" },
+      { name: "Median of Two Sorted Arrays", url: "https://leetcode.com/problems/median-of-two-sorted-arrays/", pattern: "Hard Binary Search", video: "https://youtu.be/q6IEA26hvXc", hard: true },
+    ]
+  },
+  {
+    id: 6, title: "Linked List",
+    overview: "https://www.youtube.com/watch?v=G0_I-ZF0S38",
+    problems: [
+      { name: "Reverse Linked List", url: "https://leetcode.com/problems/reverse-linked-list/", pattern: "Pointer Manipulation", video: "https://youtu.be/G0_I-ZF0S38" },
+      { name: "Linked List Cycle", url: "https://leetcode.com/problems/linked-list-cycle/", pattern: "Fast/Slow Pointer", video: "https://youtu.be/gBTe7lFR3vc" },
+      { name: "Merge Two Sorted Lists", url: "https://leetcode.com/problems/merge-two-sorted-lists/", pattern: "Merge", video: "https://youtu.be/XIdigk956u0" },
+      { name: "Reorder List", url: "https://leetcode.com/problems/reorder-list/", pattern: "Split + Reverse", video: "https://youtu.be/S5bfdUTrKLM" },
+      { name: "Reverse Nodes in K-Group", url: "https://leetcode.com/problems/reverse-nodes-in-k-group/", pattern: "Hard LL", video: "https://youtu.be/1UOPsfP85V4", hard: true },
+    ]
+  },
+  {
+    id: 7, title: "Trees",
+    overview: "https://www.youtube.com/watch?v=OnSn2XEQ4MY",
+    problems: [
+      { name: "Maximum Depth of Binary Tree", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/", pattern: "DFS", video: "https://youtu.be/hTM3phVI6YQ" },
+      { name: "Same Tree", url: "https://leetcode.com/problems/same-tree/", pattern: "DFS", video: "https://youtu.be/vRbbcKXCxOw" },
+      { name: "Height of Binary Tree", url: "https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree/problem", pattern: "DFS", video: "https://youtu.be/9RHO6jU--GU" },
+      { name: "Validate Binary Search Tree", url: "https://leetcode.com/problems/validate-binary-search-tree/", pattern: "BST Rules", video: "https://youtu.be/s6ATEkipzow" },
+      { name: "Lowest Common Ancestor of a BST", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/", pattern: "Tree DFS", video: "https://youtu.be/gs2LMfuOR9k" },
+    ]
+  },
+  {
+    id: 8, title: "Heap / Priority Queue",
+    overview: "https://www.youtube.com/watch?v=t0Cq6tVNRBA",
+    problems: [
+      { name: "Kth Largest Element in an Array", url: "https://leetcode.com/problems/kth-largest-element-in-an-array/", pattern: "Heap", video: "https://youtu.be/XEmy13g1Qxc" },
+      { name: "Top K Frequent Elements", url: "https://leetcode.com/problems/top-k-frequent-elements/", pattern: "Heap", video: "https://youtu.be/YPTqKIgVk-k" },
+      { name: "Jesse and Cookies", url: "https://www.hackerrank.com/challenges/jesse-and-cookies/problem", pattern: "Min Heap", video: "https://youtu.be/F_r0sJ1RqtE" },
+      { name: "Running Median", url: "https://www.hackerrank.com/challenges/find-the-running-median/problem", pattern: "Two Heaps", video: "https://youtu.be/itmhHWaHupI" },
+      { name: "Find Median from Data Stream", url: "https://leetcode.com/problems/find-median-from-data-stream/", pattern: "Two Heaps", video: "https://youtu.be/itmhHWaHupI" },
+    ]
+  },
+  {
+    id: 9, title: "Graphs",
+    overview: "https://www.youtube.com/watch?v=EgI5nU9etnU",
+    problems: [
+      { name: "Number of Islands", url: "https://leetcode.com/problems/number-of-islands/", pattern: "DFS/BFS", video: "https://youtu.be/pV2kpPD66nE" },
+      { name: "Clone Graph", url: "https://leetcode.com/problems/clone-graph/", pattern: "Graph Traversal", video: "https://youtu.be/mQeF6bN8hMk" },
+      { name: "Course Schedule", url: "https://leetcode.com/problems/course-schedule/", pattern: "Topological Sort", video: "https://youtu.be/EgI5nU9etnU" },
+      { name: "BFS: Shortest Reach in a Graph", url: "https://www.hackerrank.com/challenges/bfsshortreach/problem", pattern: "BFS", video: "https://youtu.be/oDqjPvD1e6A" },
+      { name: "Roads and Libraries", url: "https://www.hackerrank.com/challenges/torque-and-development/problem", pattern: "Connected Components", video: "https://youtu.be/SEvR4lbA6_k" },
+    ]
+  },
+  {
+    id: 10, title: "Backtracking",
+    overview: "https://www.youtube.com/watch?v=pfiQ_PS1g8E",
+    problems: [
+      { name: "Subsets", url: "https://leetcode.com/problems/subsets/", pattern: "Backtracking", video: "https://youtu.be/REOH22Xwdkk" },
+      { name: "Permutations", url: "https://leetcode.com/problems/permutations/", pattern: "Backtracking", video: "https://youtu.be/s7AvT7cGdSo" },
+      { name: "Combination Sum", url: "https://leetcode.com/problems/combination-sum/", pattern: "Backtracking", video: "https://youtu.be/GBKI9VSKdGg" },
+      { name: "Word Search", url: "https://leetcode.com/problems/word-search/", pattern: "Grid DFS", video: "https://youtu.be/pfiQ_PS1g8E" },
+      { name: "N-Queens", url: "https://leetcode.com/problems/n-queens/", pattern: "Classic Hard", video: "https://youtu.be/Ph95IHmRp5M", hard: true },
+    ]
+  },
+  {
+    id: 11, title: "Dynamic Programming",
+    overview: "https://www.youtube.com/watch?v=Y0lT9Fck7qI",
+    overview2: "https://www.youtube.com/watch?v=NqowT9-APqQ",
+    problems: [
+      { name: "Climbing Stairs", url: "https://leetcode.com/problems/climbing-stairs/", pattern: "1D DP", video: "https://youtu.be/Y0lT9Fck7qI" },
+      { name: "House Robber", url: "https://leetcode.com/problems/house-robber/", pattern: "1D DP", video: "https://youtu.be/73r3KWiEvyk" },
+      { name: "Max Array Sum", url: "https://www.hackerrank.com/challenges/max-array-sum/problem", pattern: "1D DP", video: "https://youtu.be/oBt53YbR9Kk" },
+      { name: "Coin Change", url: "https://leetcode.com/problems/coin-change/", pattern: "Unbounded DP", video: "https://youtu.be/H9bfqozjoqs" },
+      { name: "Longest Increasing Subsequence", url: "https://leetcode.com/problems/longest-increasing-subsequence/", pattern: "DP", video: "https://youtu.be/cjWnW0hdF1Y" },
+      { name: "Decode Ways", url: "https://leetcode.com/problems/decode-ways/", pattern: "DP", video: "https://youtu.be/6aEyTjOwlJU" },
+    ]
+  },
+  {
+    id: 12, title: "Greedy",
+    overview: "https://www.youtube.com/watch?v=3Nx5X21fPAs",
+    problems: [
+      { name: "Jump Game", url: "https://leetcode.com/problems/jump-game/", pattern: "Greedy", video: "https://youtu.be/Yan0cv2cLy8" },
+      { name: "Gas Station", url: "https://leetcode.com/problems/gas-station/", pattern: "Greedy", video: "https://youtu.be/lJwbPZGo05A" },
+      { name: "Mark and Toys", url: "https://www.hackerrank.com/challenges/mark-and-toys/problem", pattern: "Greedy", video: "https://youtu.be/6Px5bGNYEKA" },
+      { name: "Partition Labels", url: "https://leetcode.com/problems/partition-labels/", pattern: "Greedy", video: "https://youtu.be/B7m8UmZE-vw" },
+    ]
+  },
+  {
+    id: 13, title: "Trie",
+    overview: "https://www.youtube.com/watch?v=oobqoCJlHA0",
+    problems: [
+      { name: "Implement Trie (Prefix Tree)", url: "https://leetcode.com/problems/implement-trie-prefix-tree/", pattern: "Trie", video: "https://youtu.be/oobqoCJlHA0" },
+      { name: "Contacts", url: "https://www.hackerrank.com/challenges/contacts/problem", pattern: "Trie", video: "https://youtu.be/vlYZb68kAY0" },
+      { name: "Word Search II", url: "https://leetcode.com/problems/word-search-ii/", pattern: "Trie + DFS", video: "https://youtu.be/asbcE9mZz_U", hard: true },
+      { name: "No Prefix Set", url: "https://www.hackerrank.com/challenges/no-prefix-set/problem", pattern: "Trie", video: "https://youtu.be/vlYZb68kAY0" },
+    ]
+  }
+];
+
+const TOTAL = DATA.reduce((s, t) => s + t.problems.length, 0);
+let checked = JSON.parse(localStorage.getItem('dsa-checked') || '{}');
+
+function save() { localStorage.setItem('dsa-checked', JSON.stringify(checked)); }
+
+function getKey(topicId, pi) { return `${topicId}-${pi}`; }
+
+function countDone(topic) {
+  return topic.problems.filter((_, i) => checked[getKey(topic.id, i)]).length;
+}
+
+function updateOverall() {
+  const done = Object.values(checked).filter(Boolean).length;
+  document.getElementById('overall-count').textContent = `${done} / ${TOTAL}`;
+  document.getElementById('overall-fill').style.width = `${(done / TOTAL) * 100}%`;
+}
+
+function updateTopicBar(topic) {
+  const done = countDone(topic);
+  const total = topic.problems.length;
+  const pct = (done / total) * 100;
+  const fill = document.getElementById(`mini-fill-${topic.id}`);
+  const txt = document.getElementById(`mini-txt-${topic.id}`);
+  if (fill) fill.style.width = `${pct}%`;
+  if (txt) txt.textContent = `${done}/${total}`;
+}
+
+function render() {
+  const container = document.getElementById('topics');
+  container.innerHTML = '';
+  DATA.forEach(topic => {
+    const div = document.createElement('div');
+    div.className = 'topic open';
+    div.id = `topic-${topic.id}`;
+
+    const overviewLinks = `<a class="overview-link" href="${topic.overview}" target="_blank" rel="noopener">▶ Topic Overview (NeetCode)</a>`
+      + (topic.overview2 ? ` <a class="overview-link" href="${topic.overview2}" target="_blank" rel="noopener">▶ 2D Overview</a>` : '');
+
+    const rows = topic.problems.map((p, i) => {
+      const key = getKey(topic.id, i);
+      const isChecked = checked[key] ? 'checked' : '';
+      const isDone = checked[key] ? 'done' : '';
+      return `
+        <tr class="${isDone}" id="row-${topic.id}-${i}">
+          <td><input type="checkbox" class="check" ${isChecked} onchange="toggle(${topic.id}, ${i}, this)"></td>
+          <td><a class="problem-link" href="${p.url}" target="_blank" rel="noopener">${p.name}</a>${p.hard ? '<span class="hard-badge">HARD</span>' : ''}</td>
+          <td><span class="pattern-tag">${p.pattern}</span></td>
+          <td><a class="video-link" href="${p.video}" target="_blank" rel="noopener">▶ Watch</a></td>
+        </tr>`;
+    }).join('');
+
+    div.innerHTML = `
+      <div class="topic-header" onclick="toggleTopic(${topic.id})">
+        <div class="topic-title">
+          <span class="topic-num">${String(topic.id).padStart(2,'0')}</span>
+          ${topic.title}
+        </div>
+        <div class="topic-meta">
+          <span class="topic-progress-text" id="mini-txt-${topic.id}">0/${topic.problems.length}</span>
+          <div class="topic-mini-bar"><div class="topic-mini-fill" id="mini-fill-${topic.id}"></div></div>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+      <div class="topic-body">
+        ${overviewLinks}
+        <table class="problem-table">
+          <thead><tr><th></th><th>Problem</th><th>Pattern</th><th>Video</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+
+    container.appendChild(div);
+    updateTopicBar(topic);
+  });
+  updateOverall();
+}
+
+function toggle(topicId, pi, el) {
+  const key = getKey(topicId, pi);
+  checked[key] = el.checked;
+  save();
+  const row = document.getElementById(`row-${topicId}-${pi}`);
+  if (el.checked) row.classList.add('done'); else row.classList.remove('done');
+  updateTopicBar(DATA.find(t => t.id === topicId));
+  updateOverall();
+}
+
+function toggleTopic(id) {
+  document.getElementById(`topic-${id}`).classList.toggle('open');
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress?')) return;
+  checked = {};
+  save();
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
