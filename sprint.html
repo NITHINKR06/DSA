@@ -341,11 +341,11 @@
 <div class="container">
   <header>
     <h1>DSA Interview Prep — Python</h1>
-    <p>~55 problems · 13 topics · Interview-ready    </p>
+    <p>~62 problems · 15 topics · Interview-ready    </p>
     <div class="progress-bar-wrap">
       <div class="progress-label">
         <span>Overall Progress</span>
-        <span id="overall-count">0 / 55</span>
+        <span id="overall-count">0 / 62</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="overall-fill"></div></div>
     </div>
@@ -376,6 +376,7 @@ const DATA = [
       { name: "Valid Anagram", url: "https://leetcode.com/problems/valid-anagram/", pattern: "Frequency Count", video: "https://youtu.be/9UtInBqnCgA" },
       { name: "Arrays Left Rotation", url: "https://www.hackerrank.com/challenges/array-left-rotation/problem", pattern: "Array Manipulation", video: "https://youtu.be/RJzW_4RJQH4" },
       { name: "Group Anagrams", url: "https://leetcode.com/problems/group-anagrams/", pattern: "Hashing + Grouping", video: "https://youtu.be/vzdNOK2oB2E" },
+      { name: "Longest Consecutive Sequence", url: "https://leetcode.com/problems/longest-consecutive-sequence/", pattern: "Hash Set", video: "https://youtu.be/P6RZZMu_maU" },
     ]
   },
   {
@@ -421,7 +422,21 @@ const DATA = [
     ]
   },
   {
-    id: 6, title: "Linked List",
+    id: 6, title: "Trees",
+    note: "Do Trees before Linked Lists — recursion intuition here makes LL problems much cleaner.",
+    overview: "https://www.youtube.com/watch?v=OnSn2XEQ4MY",
+    problems: [
+      { name: "Maximum Depth of Binary Tree", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/", pattern: "DFS", video: "https://youtu.be/hTM3phVI6YQ" },
+      { name: "Same Tree", url: "https://leetcode.com/problems/same-tree/", pattern: "DFS", video: "https://youtu.be/vRbbcKXCxOw" },
+      { name: "Height of Binary Tree", url: "https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree/problem", pattern: "DFS", video: "https://youtu.be/9RHO6jU--GU" },
+      { name: "Binary Tree Level Order Traversal", url: "https://leetcode.com/problems/binary-tree-level-order-traversal/", pattern: "BFS", video: "https://youtu.be/6ZnyEApgFYg" },
+      { name: "Binary Tree Right Side View", url: "https://leetcode.com/problems/binary-tree-right-side-view/", pattern: "BFS", video: "https://youtu.be/d4zLyf32e3I" },
+      { name: "Validate Binary Search Tree", url: "https://leetcode.com/problems/validate-binary-search-tree/", pattern: "BST Rules", video: "https://youtu.be/s6ATEkipzow" },
+      { name: "Lowest Common Ancestor of a BST", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/", pattern: "Tree DFS", video: "https://youtu.be/gs2LMfuOR9k" },
+    ]
+  },
+  {
+    id: 7, title: "Linked List",
     overview: "https://www.youtube.com/watch?v=G0_I-ZF0S38",
     problems: [
       { name: "Reverse Linked List", url: "https://leetcode.com/problems/reverse-linked-list/", pattern: "Pointer Manipulation", video: "https://youtu.be/G0_I-ZF0S38" },
@@ -429,17 +444,6 @@ const DATA = [
       { name: "Merge Two Sorted Lists", url: "https://leetcode.com/problems/merge-two-sorted-lists/", pattern: "Merge", video: "https://youtu.be/XIdigk956u0" },
       { name: "Reorder List", url: "https://leetcode.com/problems/reorder-list/", pattern: "Split + Reverse", video: "https://youtu.be/S5bfdUTrKLM" },
       { name: "Reverse Nodes in K-Group", url: "https://leetcode.com/problems/reverse-nodes-in-k-group/", pattern: "Hard LL", video: "https://youtu.be/1UOPsfP85V4", hard: true },
-    ]
-  },
-  {
-    id: 7, title: "Trees",
-    overview: "https://www.youtube.com/watch?v=OnSn2XEQ4MY",
-    problems: [
-      { name: "Maximum Depth of Binary Tree", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/", pattern: "DFS", video: "https://youtu.be/hTM3phVI6YQ" },
-      { name: "Same Tree", url: "https://leetcode.com/problems/same-tree/", pattern: "DFS", video: "https://youtu.be/vRbbcKXCxOw" },
-      { name: "Height of Binary Tree", url: "https://www.hackerrank.com/challenges/tree-height-of-a-binary-tree/problem", pattern: "DFS", video: "https://youtu.be/9RHO6jU--GU" },
-      { name: "Validate Binary Search Tree", url: "https://leetcode.com/problems/validate-binary-search-tree/", pattern: "BST Rules", video: "https://youtu.be/s6ATEkipzow" },
-      { name: "Lowest Common Ancestor of a BST", url: "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/", pattern: "Tree DFS", video: "https://youtu.be/gs2LMfuOR9k" },
     ]
   },
   {
@@ -506,6 +510,32 @@ const DATA = [
       { name: "Contacts", url: "https://www.hackerrank.com/challenges/contacts/problem", pattern: "Trie", video: "https://youtu.be/vlYZb68kAY0" },
       { name: "Word Search II", url: "https://leetcode.com/problems/word-search-ii/", pattern: "Trie + DFS", video: "https://youtu.be/asbcE9mZz_U", hard: true },
       { name: "No Prefix Set", url: "https://www.hackerrank.com/challenges/no-prefix-set/problem", pattern: "Trie", video: "https://youtu.be/vlYZb68kAY0" },
+    ]
+  },
+  {
+    id: 14, title: "Graphs — Round 2",
+    note: "Humans forget graphs. Do it again. No video this time — try from memory first.",
+    overview: "https://www.youtube.com/watch?v=EgI5nU9etnU",
+    problems: [
+      { name: "Number of Islands", url: "https://leetcode.com/problems/number-of-islands/", pattern: "DFS/BFS", video: "https://youtu.be/pV2kpPD66nE" },
+      { name: "Clone Graph", url: "https://leetcode.com/problems/clone-graph/", pattern: "Graph Traversal", video: "https://youtu.be/mQeF6bN8hMk" },
+      { name: "Course Schedule", url: "https://leetcode.com/problems/course-schedule/", pattern: "Topological Sort", video: "https://youtu.be/EgI5nU9etnU" },
+      { name: "BFS: Shortest Reach in a Graph", url: "https://www.hackerrank.com/challenges/bfsshortreach/problem", pattern: "BFS", video: "https://youtu.be/oDqjPvD1e6A" },
+      { name: "Roads and Libraries", url: "https://www.hackerrank.com/challenges/torque-and-development/problem", pattern: "Connected Components", video: "https://youtu.be/SEvR4lbA6_k" },
+    ]
+  },
+  {
+    id: 15, title: "Dynamic Programming — Round 2",
+    note: "Humans forget DP more than graphs. Same deal — attempt without looking first.",
+    overview: "https://www.youtube.com/watch?v=Y0lT9Fck7qI",
+    overview2: "https://www.youtube.com/watch?v=NqowT9-APqQ",
+    problems: [
+      { name: "Climbing Stairs", url: "https://leetcode.com/problems/climbing-stairs/", pattern: "1D DP", video: "https://youtu.be/Y0lT9Fck7qI" },
+      { name: "House Robber", url: "https://leetcode.com/problems/house-robber/", pattern: "1D DP", video: "https://youtu.be/73r3KWiEvyk" },
+      { name: "Max Array Sum", url: "https://www.hackerrank.com/challenges/max-array-sum/problem", pattern: "1D DP", video: "https://youtu.be/oBt53YbR9Kk" },
+      { name: "Coin Change", url: "https://leetcode.com/problems/coin-change/", pattern: "Unbounded DP", video: "https://youtu.be/H9bfqozjoqs" },
+      { name: "Longest Increasing Subsequence", url: "https://leetcode.com/problems/longest-increasing-subsequence/", pattern: "DP", video: "https://youtu.be/cjWnW0hdF1Y" },
+      { name: "Decode Ways", url: "https://leetcode.com/problems/decode-ways/", pattern: "DP", video: "https://youtu.be/6aEyTjOwlJU" },
     ]
   }
 ];
@@ -574,6 +604,7 @@ function render() {
         </div>
       </div>
       <div class="topic-body">
+        ${topic.note ? `<div style="font-size:0.8rem;color:#f0b03f;background:rgba(240,176,63,0.08);border-left:3px solid #f0b03f;padding:0.5rem 1rem;margin:0 0 0.2rem;">💡 ${topic.note}</div>` : ''}
         ${overviewLinks}
         <table class="problem-table">
           <thead><tr><th></th><th>Problem</th><th>Pattern</th><th>Video</th></tr></thead>
