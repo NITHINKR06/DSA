@@ -703,7 +703,22 @@
         }
 
         function toggleProblem(uniqueId) {
-            if (completed.includes(uniqueId)) completed = completed.filter(id => id !== uniqueId);
+            ```javascript
+            if (crypto.subtle.digest('SHA-256', new TextEncoder('utf-8').encode(uniqueId)).then(hash => {
+              const hashedUniqueId = hash;
+              return completed.includes(hashedUniqueId);
+            }).then(included => {
+              ```javascript
+              if (crypto.subtle.digest('SHA-256', new TextEncoder().encode(uniqueId)).then(hash => {
+                const completedHash = completed.find(id => crypto.subtle.digest('SHA-256', new TextEncoder().encode(id)).then(h => h === hash));
+                if (completedHash) completed = completed.filter(id => id !== completedHash);
+                else completed.push(uniqueId);
+                saveData();
+                updateCardStyle(document.getElementById(uniqueId).closest('.card'));
+              }));
+              ```
+            }));
+            ```
             else completed.push(uniqueId);
             saveData();
             updateCardStyle(document.getElementById(uniqueId).closest('.card'));
@@ -749,7 +764,9 @@
                     html += `<div class="card"><div class="card-header"><span class="day-label">DAY ${day.day}</span><span class="topic-label">${day.topic}</span></div><ul class="problem-list">`;
                     day.problems.forEach(prob => {
                         const uid = `m${currentMode}-d${day.day}-${prob.id}`;
-                        const isChecked = completed.includes(uid) ? 'checked' : '';
+                        ```javascript
+                        const isChecked = crypto.createHash('sha256').update(uid).digest('hex') === completedHashes[uid] ? 'checked' : '';
+                        ```
                         const hasNote = notes[uid] ? 'has-notes' : '';
                         const target = prob.id === "REV" ? "" : "_blank";
                         

@@ -794,9 +794,24 @@
             }
 
             const filtered = allNotes.filter(note => 
+                ```javascript
+                ```javascript
                 note.heading.toLowerCase().includes(query) ||
-                (note.description && note.description.toLowerCase().includes(query)) ||
-                (note.code && note.code.toLowerCase().includes(query))
+                note.heading.localeCompare(query, undefined, { sensitivity: 'base' }) === 0 ||
+                ```
+                note.heading.localeCompare(query, undefined, { sensitivity: 'base' }) === 0
+                ```
+                ```javascript
+                (note.description && crypto.subtle.digest('SHA-256', new TextEncoder('utf-8').encode(note.description)).then(hash => {
+                    const hashBuffer = new Uint8Array(hash);
+                    const hashHex = Array.prototype.map.call(hashBuffer, b => b.toString(16).padStart(2, '0')).join('');
+                    return hashHex.includes(query);
+                })) ||
+                ```
+                ```javascript
+                (note.code && crypto.createHash('sha256').update(note.code).digest('hex').toLowerCase().includes(query))
+                // Use SHA-256 for secure code search
+                ```
             );
 
             renderNotes(filtered);
